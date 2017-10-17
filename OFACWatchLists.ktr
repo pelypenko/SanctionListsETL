@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <transformation>
   <info>
-    <name>ofacxml watchlist</name>
+    <name>OFACWatchLists</name>
     <description />
     <extended_description />
     <trans_version />
@@ -539,51 +539,81 @@
       <enabled>Y</enabled>
     </hop>
     <hop>
+      <from>modified</from>
+      <to>Get Variables</to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>deleted = true</from>
+      <to>modified</to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
       <from>Trim notes</from>
-      <to>Sort by program</to>
+      <to>deleted = true</to>
       <enabled>Y</enabled>
     </hop>
     <hop>
-      <from>Sort by program</from>
-      <to>Group by program</to>
+      <from>watchlisttypes</from>
+      <to>Sort WTT by key 2</to>
       <enabled>Y</enabled>
     </hop>
     <hop>
-      <from>Sort by program</from>
+      <from>Get Variables</from>
+      <to>Sort WTT by key 1</to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>Sort WTT by key 1</from>
       <to>Merge Join</to>
       <enabled>Y</enabled>
     </hop>
     <hop>
-      <from>Sort by ep_key</from>
+      <from>Sort WTT by key 2</from>
       <to>Merge Join</to>
-      <enabled>Y</enabled>
-    </hop>
-    <hop>
-      <from>Group by program</from>
-      <to>Insert watchlisttypes</to>
-      <enabled>Y</enabled>
-    </hop>
-    <hop>
-      <from>Get System Info</from>
-      <to>Sort4</to>
-      <enabled>Y</enabled>
-    </hop>
-    <hop>
-      <from>Sort4</from>
-      <to>Insert watchlists</to>
       <enabled>Y</enabled>
     </hop>
     <hop>
       <from>Merge Join</from>
-      <to>Get System Info</to>
+      <to>Final sort</to>
       <enabled>Y</enabled>
     </hop>
     <hop>
-      <from>Get updated watchlisttypes</from>
-      <to>Sort by ep_key</to>
+      <from>Final sort</from>
+      <to>Insert watchlists</to>
       <enabled>Y</enabled>
     </hop>
   </order>
+  <step>
+    <name>modified</name>
+    <type>SystemInfo</type>
+    <description />
+    <distribute>Y</distribute>
+    <custom_distribution />
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name />
+    </partitioning>
+    <fields>
+      <field>
+        <name>modified</name>
+        <type>system date (variable)</type>
+      </field>
+    </fields>
+    <cluster_schema />
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>256</xloc>
+      <yloc>224</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
   <step>
     <name>Get data from XML</name>
     <type>getXMLData</type>
@@ -612,7 +642,12 @@
       <name>https://www.treasury.gov/ofac/downloads/sdn.xml</name>
       <filemask />
       <exclude_filemask />
-      <file_required>N</file_required>
+      <file_required>Y</file_required>
+      <include_subfolders>N</include_subfolders>
+      <name>https://www.treasury.gov/ofac/downloads/consolidated/consolidated.xml</name>
+      <filemask />
+      <exclude_filemask />
+      <file_required>Y</file_required>
       <include_subfolders>N</include_subfolders>
     </file>
     <fields>
@@ -1305,45 +1340,6 @@
     </GUI>
   </step>
   <step>
-    <name>Group by program</name>
-    <type>GroupBy</type>
-    <description />
-    <distribute>N</distribute>
-    <custom_distribution />
-    <copies>1</copies>
-    <partitioning>
-      <method>none</method>
-      <schema_name />
-    </partitioning>
-    <all_rows>N</all_rows>
-    <ignore_aggregate>N</ignore_aggregate>
-    <field_ignore />
-    <directory>%%java.io.tmpdir%%</directory>
-    <prefix>grp</prefix>
-    <add_linenr>N</add_linenr>
-    <linenr_fieldname />
-    <give_back_row>N</give_back_row>
-    <group>
-      <field>
-        <name>program</name>
-      </field>
-    </group>
-    <fields>
-      </fields>
-    <cluster_schema />
-    <remotesteps>
-      <input>
-      </input>
-      <output>
-      </output>
-    </remotesteps>
-    <GUI>
-      <xloc>448</xloc>
-      <yloc>320</yloc>
-      <draw>Y</draw>
-    </GUI>
-  </step>
-  <step>
     <name>Group by uid</name>
     <type>GroupBy</type>
     <description />
@@ -1443,8 +1439,8 @@
     </GUI>
   </step>
   <step>
-    <name>Sort by program</name>
-    <type>SortRows</type>
+    <name>Insert watchlists</name>
+    <type>InsertUpdate</type>
     <description />
     <distribute>Y</distribute>
     <custom_distribution />
@@ -1453,23 +1449,75 @@
       <method>none</method>
       <schema_name />
     </partitioning>
-    <directory>%%java.io.tmpdir%%</directory>
-    <prefix>out</prefix>
-    <sort_size>1000000</sort_size>
-    <free_memory />
-    <compress>N</compress>
-    <compress_variable />
-    <unique_rows>N</unique_rows>
-    <fields>
-      <field>
-        <name>program</name>
-        <ascending>Y</ascending>
-        <case_sensitive>N</case_sensitive>
-        <collator_enabled>N</collator_enabled>
-        <collator_strength>0</collator_strength>
-        <presorted>N</presorted>
-      </field>
-    </fields>
+    <connection>OpenDB</connection>
+    <commit>100</commit>
+    <update_bypassed>N</update_bypassed>
+    <lookup>
+      <schema />
+      <table>watchlists</table>
+      <key>
+        <name>wtt_id</name>
+        <field>watchlisttype_id</field>
+        <condition>=</condition>
+        <name2 />
+      </key>
+      <key>
+        <name>uid</name>
+        <field>remoteid</field>
+        <condition>=</condition>
+        <name2 />
+      </key>
+      <value>
+        <name>name</name>
+        <rename>fullname</rename>
+        <update>Y</update>
+      </value>
+      <value>
+        <name>aliases</name>
+        <rename>akas</rename>
+        <update>Y</update>
+      </value>
+      <value>
+        <name>addresses</name>
+        <rename>addresses</rename>
+        <update>Y</update>
+      </value>
+      <value>
+        <name>dateofbirths</name>
+        <rename>dateOfBirths</rename>
+        <update>Y</update>
+      </value>
+      <value>
+        <name>notes</name>
+        <rename>notes</rename>
+        <update>Y</update>
+      </value>
+      <value>
+        <name>modifiedon</name>
+        <rename>modified</rename>
+        <update>Y</update>
+      </value>
+      <value>
+        <name>watchlisttype_id</name>
+        <rename>wtt_id</rename>
+        <update>N</update>
+      </value>
+      <value>
+        <name>remoteid</name>
+        <rename>uid</rename>
+        <update>N</update>
+      </value>
+      <value>
+        <name>createdon</name>
+        <rename>modified</rename>
+        <update>N</update>
+      </value>
+      <value>
+        <name>deleted</name>
+        <rename>deleted</rename>
+        <update>Y</update>
+      </value>
+    </lookup>
     <cluster_schema />
     <remotesteps>
       <input>
@@ -1478,8 +1526,8 @@
       </output>
     </remotesteps>
     <GUI>
-      <xloc>224</xloc>
-      <yloc>320</yloc>
+      <xloc>1024</xloc>
+      <yloc>416</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
@@ -1525,6 +1573,55 @@
     </GUI>
   </step>
   <step>
+    <name>Final sort</name>
+    <type>SortRows</type>
+    <description />
+    <distribute>Y</distribute>
+    <custom_distribution />
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name />
+    </partitioning>
+    <directory>%%java.io.tmpdir%%</directory>
+    <prefix>out</prefix>
+    <sort_size>1000000</sort_size>
+    <free_memory />
+    <compress>N</compress>
+    <compress_variable />
+    <unique_rows>N</unique_rows>
+    <fields>
+      <field>
+        <name>wtt_id</name>
+        <ascending>Y</ascending>
+        <case_sensitive>N</case_sensitive>
+        <collator_enabled>N</collator_enabled>
+        <collator_strength>0</collator_strength>
+        <presorted>N</presorted>
+      </field>
+      <field>
+        <name>uid</name>
+        <ascending>Y</ascending>
+        <case_sensitive>N</case_sensitive>
+        <collator_enabled>N</collator_enabled>
+        <collator_strength>0</collator_strength>
+        <presorted>N</presorted>
+      </field>
+    </fields>
+    <cluster_schema />
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>240</xloc>
+      <yloc>416</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <step>
     <name>Trim notes</name>
     <type>StringOperations</type>
     <description />
@@ -1558,7 +1655,7 @@
       </output>
     </remotesteps>
     <GUI>
-      <xloc>224</xloc>
+      <xloc>704</xloc>
       <yloc>224</yloc>
       <draw>Y</draw>
     </GUI>
@@ -1901,10 +1998,86 @@
     </GUI>
   </step>
   <step>
-    <name>Get updated watchlisttypes</name>
+    <name>deleted = true</name>
+    <type>Constant</type>
+    <description />
+    <distribute>Y</distribute>
+    <custom_distribution />
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name />
+    </partitioning>
+    <fields>
+      <field>
+        <name>deleted</name>
+        <type>Boolean</type>
+        <format />
+        <currency />
+        <decimal />
+        <group />
+        <nullif>False</nullif>
+        <length>-1</length>
+        <precision>-1</precision>
+        <set_empty_string>N</set_empty_string>
+      </field>
+    </fields>
+    <cluster_schema />
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>480</xloc>
+      <yloc>224</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <step>
+    <name>Get Variables</name>
+    <type>GetVariable</type>
+    <description />
+    <distribute>Y</distribute>
+    <custom_distribution />
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name />
+    </partitioning>
+    <fields>
+      <field>
+        <name>WatchListKey</name>
+        <variable>${WatchListKey}</variable>
+        <type>String</type>
+        <format />
+        <currency />
+        <decimal />
+        <group />
+        <length>-1</length>
+        <precision>-1</precision>
+        <trim_type>both</trim_type>
+      </field>
+    </fields>
+    <cluster_schema />
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>112</xloc>
+      <yloc>224</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <step>
+    <name>watchlisttypes</name>
     <type>TableInput</type>
     <description />
-    <distribute>N</distribute>
+    <distribute>Y</distribute>
     <custom_distribution />
     <copies>1</copies>
     <partitioning>
@@ -1912,9 +2085,10 @@
       <schema_name />
     </partitioning>
     <connection>OpenDB</connection>
-    <sql>SELECT id as ep_id, "key" as ep_key 
-FROM watchlisttypes 
-order by ep_key</sql>
+    <sql>select id as WTT_Id, 
+"key" as WTT_Key
+from watchlisttypes
+order by "key"</sql>
     <limit>0</limit>
     <lookup />
     <execute_each_row>N</execute_each_row>
@@ -1928,8 +2102,8 @@ order by ep_key</sql>
       </output>
     </remotesteps>
     <GUI>
-      <xloc>800</xloc>
-      <yloc>448</yloc>
+      <xloc>1024</xloc>
+      <yloc>320</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
@@ -1945,13 +2119,13 @@ order by ep_key</sql>
       <schema_name />
     </partitioning>
     <join_type>INNER</join_type>
-    <step1>Sort by program</step1>
-    <step2>Sort by ep_key</step2>
+    <step1>Sort WTT by key 1</step1>
+    <step2>Sort WTT by key 2</step2>
     <keys_1>
-      <key>program</key>
+      <key>WatchListKey</key>
     </keys_1>
     <keys_2>
-      <key>ep_key</key>
+      <key>wtt_key</key>
     </keys_2>
     <cluster_schema />
     <remotesteps>
@@ -1961,54 +2135,13 @@ order by ep_key</sql>
       </output>
     </remotesteps>
     <GUI>
-      <xloc>224</xloc>
-      <yloc>448</yloc>
+      <xloc>240</xloc>
+      <yloc>320</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
   <step>
-    <name>Sort by ep_key</name>
-    <type>SortRows</type>
-    <description />
-    <distribute>N</distribute>
-    <custom_distribution />
-    <copies>1</copies>
-    <partitioning>
-      <method>none</method>
-      <schema_name />
-    </partitioning>
-    <directory>%%java.io.tmpdir%%</directory>
-    <prefix>out</prefix>
-    <sort_size>1000000</sort_size>
-    <free_memory />
-    <compress>N</compress>
-    <compress_variable />
-    <unique_rows>N</unique_rows>
-    <fields>
-      <field>
-        <name>ep_key</name>
-        <ascending>Y</ascending>
-        <case_sensitive>N</case_sensitive>
-        <collator_enabled>N</collator_enabled>
-        <collator_strength>0</collator_strength>
-        <presorted>N</presorted>
-      </field>
-    </fields>
-    <cluster_schema />
-    <remotesteps>
-      <input>
-      </input>
-      <output>
-      </output>
-    </remotesteps>
-    <GUI>
-      <xloc>448</xloc>
-      <yloc>448</yloc>
-      <draw>Y</draw>
-    </GUI>
-  </step>
-  <step>
-    <name>Sort4</name>
+    <name>Sort WTT by key 1</name>
     <type>SortRows</type>
     <description />
     <distribute>Y</distribute>
@@ -2027,15 +2160,7 @@ order by ep_key</sql>
     <unique_rows>N</unique_rows>
     <fields>
       <field>
-        <name>ep_id</name>
-        <ascending>Y</ascending>
-        <case_sensitive>N</case_sensitive>
-        <collator_enabled>N</collator_enabled>
-        <collator_strength>0</collator_strength>
-        <presorted>N</presorted>
-      </field>
-      <field>
-        <name>uid</name>
+        <name>WatchListKey</name>
         <ascending>Y</ascending>
         <case_sensitive>N</case_sensitive>
         <collator_enabled>N</collator_enabled>
@@ -2051,14 +2176,14 @@ order by ep_key</sql>
       </output>
     </remotesteps>
     <GUI>
-      <xloc>448</xloc>
-      <yloc>576</yloc>
+      <xloc>112</xloc>
+      <yloc>320</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
   <step>
-    <name>Insert watchlists</name>
-    <type>InsertUpdate</type>
+    <name>Sort WTT by key 2</name>
+    <type>SortRows</type>
     <description />
     <distribute>Y</distribute>
     <custom_distribution />
@@ -2067,98 +2192,21 @@ order by ep_key</sql>
       <method>none</method>
       <schema_name />
     </partitioning>
-    <connection>OpenDB</connection>
-    <commit>100</commit>
-    <update_bypassed>N</update_bypassed>
-    <lookup>
-      <schema />
-      <table>watchlists</table>
-      <key>
-        <name>ep_id</name>
-        <field>watchlisttype_id</field>
-        <condition>=</condition>
-        <name2 />
-      </key>
-      <key>
-        <name>uid</name>
-        <field>remoteid</field>
-        <condition>=</condition>
-        <name2 />
-      </key>
-      <value>
-        <name>name</name>
-        <rename>fullname</rename>
-        <update>Y</update>
-      </value>
-      <value>
-        <name>aliases</name>
-        <rename>akas</rename>
-        <update>Y</update>
-      </value>
-      <value>
-        <name>addresses</name>
-        <rename>addresses</rename>
-        <update>Y</update>
-      </value>
-      <value>
-        <name>dateofbirths</name>
-        <rename>dateOfBirths</rename>
-        <update>Y</update>
-      </value>
-      <value>
-        <name>notes</name>
-        <rename>notes</rename>
-        <update>Y</update>
-      </value>
-      <value>
-        <name>modifiedon</name>
-        <rename>modified</rename>
-        <update>Y</update>
-      </value>
-      <value>
-        <name>watchlisttype_id</name>
-        <rename>ep_id</rename>
-        <update>N</update>
-      </value>
-      <value>
-        <name>remoteid</name>
-        <rename>uid</rename>
-        <update>N</update>
-      </value>
-      <value>
-        <name>createdon</name>
-        <rename>modified</rename>
-        <update>N</update>
-      </value>
-    </lookup>
-    <cluster_schema />
-    <remotesteps>
-      <input>
-      </input>
-      <output>
-      </output>
-    </remotesteps>
-    <GUI>
-      <xloc>608</xloc>
-      <yloc>576</yloc>
-      <draw>Y</draw>
-    </GUI>
-  </step>
-  <step>
-    <name>Get System Info</name>
-    <type>SystemInfo</type>
-    <description />
-    <distribute>Y</distribute>
-    <custom_distribution />
-    <copies>1</copies>
-    <partitioning>
-      <method>none</method>
-      <schema_name />
-    </partitioning>
+    <directory>%%java.io.tmpdir%%</directory>
+    <prefix>out</prefix>
+    <sort_size>1000000</sort_size>
+    <free_memory />
+    <compress>N</compress>
+    <compress_variable />
+    <unique_rows>N</unique_rows>
     <fields>
       <field>
-        <name>modified</name>
-        <type>system date (variable)</type>
+        <name>wtt_key</name>
+        <ascending>Y</ascending>
+        <case_sensitive>N</case_sensitive>
+        <collator_enabled>N</collator_enabled>
+        <collator_strength>0</collator_strength>
+        <presorted>N</presorted>
       </field>
     </fields>
     <cluster_schema />
@@ -2169,54 +2217,7 @@ order by ep_key</sql>
       </output>
     </remotesteps>
     <GUI>
-      <xloc>224</xloc>
-      <yloc>576</yloc>
-      <draw>Y</draw>
-    </GUI>
-  </step>
-  <step>
-    <name>Insert watchlisttypes</name>
-    <type>InsertUpdate</type>
-    <description />
-    <distribute>Y</distribute>
-    <custom_distribution />
-    <copies>1</copies>
-    <partitioning>
-      <method>none</method>
-      <schema_name />
-    </partitioning>
-    <connection>OpenDB</connection>
-    <commit>100</commit>
-    <update_bypassed>Y</update_bypassed>
-    <lookup>
-      <schema />
-      <table>watchlisttypes</table>
-      <key>
-        <name>program</name>
-        <field>key</field>
-        <condition>=</condition>
-        <name2 />
-      </key>
-      <value>
-        <name>key</name>
-        <rename>program</rename>
-        <update>N</update>
-      </value>
-      <value>
-        <name>name</name>
-        <rename>program</rename>
-        <update>Y</update>
-      </value>
-    </lookup>
-    <cluster_schema />
-    <remotesteps>
-      <input>
-      </input>
-      <output>
-      </output>
-    </remotesteps>
-    <GUI>
-      <xloc>608</xloc>
+      <xloc>800</xloc>
       <yloc>320</yloc>
       <draw>Y</draw>
     </GUI>
