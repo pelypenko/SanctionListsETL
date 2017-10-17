@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <job>
-  <name>ofac</name>
+  <name>OFAC</name>
   <description />
   <extended_description />
   <job_version />
@@ -304,8 +304,8 @@
       <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>80</xloc>
-      <yloc>144</yloc>
+      <xloc>128</xloc>
+      <yloc>32</yloc>
     </entry>
     <entry>
       <name>Success</name>
@@ -314,8 +314,8 @@
       <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>928</xloc>
-      <yloc>144</yloc>
+      <xloc>1024</xloc>
+      <yloc>160</yloc>
     </entry>
     <entry>
       <name>Set variables</name>
@@ -339,16 +339,16 @@
       <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>240</xloc>
-      <yloc>144</yloc>
+      <xloc>128</xloc>
+      <yloc>160</yloc>
     </entry>
     <entry>
-      <name>Add OFAC Type</name>
+      <name>Add OFAC type</name>
       <description />
       <type>TRANS</type>
       <specification_method>filename</specification_method>
       <trans_object_id />
-      <filename>${Internal.Entry.Current.Directory}/OFACWatchListsTypes.ktr</filename>
+      <filename>${Internal.Entry.Current.Directory}/UpdateWatchListsTypes.ktr</filename>
       <transname />
       <arg_from_previous>N</arg_from_previous>
       <params_from_previous>N</params_from_previous>
@@ -375,16 +375,16 @@
       <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>384</xloc>
-      <yloc>144</yloc>
+      <xloc>352</xloc>
+      <yloc>160</yloc>
     </entry>
     <entry>
-      <name>Mark all existing records as deleted</name>
+      <name>Mark all existing OFAC deleted</name>
       <description />
       <type>TRANS</type>
       <specification_method>filename</specification_method>
       <trans_object_id />
-      <filename>${Internal.Entry.Current.Directory}/UpdateDeletedFields.ktr</filename>
+      <filename>${Internal.Entry.Current.Directory}/SetExistRecordsDeleted.ktr</filename>
       <transname />
       <arg_from_previous>N</arg_from_previous>
       <params_from_previous>N</params_from_previous>
@@ -411,8 +411,8 @@
       <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>592</xloc>
-      <yloc>144</yloc>
+      <xloc>576</xloc>
+      <yloc>160</yloc>
     </entry>
     <entry>
       <name>Merge OFAC lists</name>
@@ -420,7 +420,7 @@
       <type>TRANS</type>
       <specification_method>filename</specification_method>
       <trans_object_id />
-      <filename>${Internal.Entry.Current.Directory}/OFACWatchLists.ktr</filename>
+      <filename>${Internal.Entry.Current.Directory}/OFAC.ktr</filename>
       <transname />
       <arg_from_previous>N</arg_from_previous>
       <params_from_previous>N</params_from_previous>
@@ -447,8 +447,8 @@
       <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>784</xloc>
-      <yloc>144</yloc>
+      <xloc>832</xloc>
+      <yloc>160</yloc>
     </entry>
   </entries>
   <hops>
@@ -463,7 +463,7 @@
     </hop>
     <hop>
       <from>Set variables</from>
-      <to>Add OFAC Type</to>
+      <to>Add OFAC type</to>
       <from_nr>0</from_nr>
       <to_nr>0</to_nr>
       <enabled>Y</enabled>
@@ -471,8 +471,8 @@
       <unconditional>N</unconditional>
     </hop>
     <hop>
-      <from>Add OFAC Type</from>
-      <to>Mark all existing records as deleted</to>
+      <from>Add OFAC type</from>
+      <to>Mark all existing OFAC deleted</to>
       <from_nr>0</from_nr>
       <to_nr>0</to_nr>
       <enabled>Y</enabled>
@@ -480,7 +480,7 @@
       <unconditional>N</unconditional>
     </hop>
     <hop>
-      <from>Mark all existing records as deleted</from>
+      <from>Mark all existing OFAC deleted</from>
       <to>Merge OFAC lists</to>
       <from_nr>0</from_nr>
       <to_nr>0</to_nr>
