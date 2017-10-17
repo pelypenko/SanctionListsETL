@@ -437,11 +437,11 @@
   <notepads>
   </notepads>
   <connection>
-    <name>OpenDB</name>
+    <name>watchlistdb</name>
     <server>localhost</server>
     <type>POSTGRESQL</type>
     <access>Native</access>
-    <database>opendb</database>
+    <database>watchlistdb</database>
     <port>5432</port>
     <username>postgres</username>
     <password>Encrypted 2be98afc86aa7f2e49f0abb7edf9fa683</password>
@@ -560,7 +560,7 @@
       <method>none</method>
       <schema_name />
     </partitioning>
-    <connection>OpenDB</connection>
+    <connection>watchlistdb</connection>
     <commit>100</commit>
     <update_bypassed>N</update_bypassed>
     <lookup>
