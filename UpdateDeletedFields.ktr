@@ -494,17 +494,37 @@
     </hop>
     <hop>
       <from>Sort WTT by key 2</from>
-      <to>Merge Join</to>
+      <to>Join to get WTT id</to>
       <enabled>Y</enabled>
     </hop>
     <hop>
       <from>Get Variables</from>
-      <to>Merge Join</to>
+      <to>Join to get WTT id</to>
       <enabled>Y</enabled>
     </hop>
     <hop>
-      <from>Merge Join</from>
+      <from>watchlists</from>
+      <to>Sort by watchlistype</to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>Join to get WTT id</from>
+      <to>Join</to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>Join</from>
       <to>deleted = true</to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>Sort by watchlistype</from>
+      <to>Join</to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>deleted = true</from>
+      <to>Insert / Update</to>
       <enabled>Y</enabled>
     </hop>
   </order>
@@ -541,13 +561,13 @@
       </output>
     </remotesteps>
     <GUI>
-      <xloc>80</xloc>
+      <xloc>592</xloc>
       <yloc>48</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
   <step>
-    <name>Merge Join</name>
+    <name>Join to get WTT id</name>
     <type>MergeJoin</type>
     <description />
     <distribute>Y</distribute>
@@ -558,13 +578,13 @@
       <schema_name />
     </partitioning>
     <join_type>INNER</join_type>
-    <step1>Get Variables</step1>
-    <step2>Sort WTT by key 2</step2>
+    <step1>Sort WTT by key 2</step1>
+    <step2>Get Variables</step2>
     <keys_1>
-      <key>WatchListKey</key>
+      <key>wtt_key</key>
     </keys_1>
     <keys_2>
-      <key>wtt_key</key>
+      <key>WatchListKey</key>
     </keys_2>
     <cluster_schema />
     <remotesteps>
@@ -574,7 +594,7 @@
       </output>
     </remotesteps>
     <GUI>
-      <xloc>224</xloc>
+      <xloc>432</xloc>
       <yloc>48</yloc>
       <draw>Y</draw>
     </GUI>
@@ -615,7 +635,7 @@
       </output>
     </remotesteps>
     <GUI>
-      <xloc>400</xloc>
+      <xloc>256</xloc>
       <yloc>48</yloc>
       <draw>Y</draw>
     </GUI>
@@ -653,8 +673,8 @@
       </output>
     </remotesteps>
     <GUI>
-      <xloc>224</xloc>
-      <yloc>176</yloc>
+      <xloc>432</xloc>
+      <yloc>240</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
@@ -687,8 +707,161 @@ order by "key"</sql>
       </output>
     </remotesteps>
     <GUI>
-      <xloc>528</xloc>
+      <xloc>96</xloc>
       <yloc>48</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <step>
+    <name>watchlists</name>
+    <type>TableInput</type>
+    <description />
+    <distribute>Y</distribute>
+    <custom_distribution />
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name />
+    </partitioning>
+    <connection>watchlistdb</connection>
+    <sql>select id, watchlisttype_id from watchlists</sql>
+    <limit>0</limit>
+    <lookup />
+    <execute_each_row>N</execute_each_row>
+    <variables_active>N</variables_active>
+    <lazy_conversion_active>N</lazy_conversion_active>
+    <cluster_schema />
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>96</xloc>
+      <yloc>144</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <step>
+    <name>Sort by watchlistype</name>
+    <type>SortRows</type>
+    <description />
+    <distribute>Y</distribute>
+    <custom_distribution />
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name />
+    </partitioning>
+    <directory>%%java.io.tmpdir%%</directory>
+    <prefix>out</prefix>
+    <sort_size>1000000</sort_size>
+    <free_memory />
+    <compress>N</compress>
+    <compress_variable />
+    <unique_rows>N</unique_rows>
+    <fields>
+      <field>
+        <name>watchlisttype_id</name>
+        <ascending>Y</ascending>
+        <case_sensitive>N</case_sensitive>
+        <collator_enabled>N</collator_enabled>
+        <collator_strength>0</collator_strength>
+        <presorted>N</presorted>
+      </field>
+    </fields>
+    <cluster_schema />
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>256</xloc>
+      <yloc>144</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <step>
+    <name>Join</name>
+    <type>MergeJoin</type>
+    <description />
+    <distribute>Y</distribute>
+    <custom_distribution />
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name />
+    </partitioning>
+    <join_type>INNER</join_type>
+    <step1>Sort by watchlistype</step1>
+    <step2>Join to get WTT id</step2>
+    <keys_1>
+      <key>watchlisttype_id</key>
+    </keys_1>
+    <keys_2>
+      <key>wtt_id</key>
+    </keys_2>
+    <cluster_schema />
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>432</xloc>
+      <yloc>144</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <step>
+    <name>Insert / Update</name>
+    <type>InsertUpdate</type>
+    <description />
+    <distribute>Y</distribute>
+    <custom_distribution />
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name />
+    </partitioning>
+    <connection>watchlistdb</connection>
+    <commit>100</commit>
+    <update_bypassed>N</update_bypassed>
+    <lookup>
+      <schema />
+      <table>watchlists</table>
+      <key>
+        <name>id</name>
+        <field>id</field>
+        <condition>=</condition>
+        <name2 />
+      </key>
+      <key>
+        <name>watchlisttype_id</name>
+        <field>watchlisttype_id</field>
+        <condition>=</condition>
+        <name2 />
+      </key>
+      <value>
+        <name>deleted</name>
+        <rename>deleted</rename>
+        <update>Y</update>
+      </value>
+    </lookup>
+    <cluster_schema />
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>432</xloc>
+      <yloc>336</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
