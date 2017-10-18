@@ -593,6 +593,26 @@
       <to>Merge Join</to>
       <enabled>Y</enabled>
     </hop>
+    <hop>
+      <from>Merge Join</from>
+      <to>Sort WTT by key 2</to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>Sort WTT by key 2</from>
+      <to>deleted = true</to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>deleted = true</from>
+      <to>modified</to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>modified</from>
+      <to>Insert / Update</to>
+      <enabled>Y</enabled>
+    </hop>
   </order>
   <step>
     <name>Get data</name>
@@ -1062,7 +1082,7 @@
         <currency />
         <decimal />
         <group />
-        <nullif>UNSC</nullif>
+        <nullif>OSFI-UNSC</nullif>
         <length>-1</length>
         <precision>-1</precision>
         <set_empty_string>N</set_empty_string>
@@ -1100,7 +1120,7 @@
         <currency />
         <decimal />
         <group />
-        <nullif>RIUNRST</nullif>
+        <nullif>OSFI-RIUNRST</nullif>
         <length>-1</length>
         <precision>-1</precision>
         <set_empty_string>N</set_empty_string>
@@ -1138,7 +1158,7 @@
         <currency />
         <decimal />
         <group />
-        <nullif>CC</nullif>
+        <nullif>OSFI-CC</nullif>
         <length>-1</length>
         <precision>-1</precision>
         <set_empty_string>N</set_empty_string>
@@ -1345,7 +1365,7 @@
       </output>
     </remotesteps>
     <GUI>
-      <xloc>256</xloc>
+      <xloc>192</xloc>
       <yloc>400</yloc>
       <draw>Y</draw>
     </GUI>
@@ -1453,8 +1473,203 @@ order by "key"</sql>
       </output>
     </remotesteps>
     <GUI>
-      <xloc>480</xloc>
+      <xloc>336</xloc>
       <yloc>400</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <step>
+    <name>Sort WTT by key 2</name>
+    <type>SortRows</type>
+    <description />
+    <distribute>Y</distribute>
+    <custom_distribution />
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name />
+    </partitioning>
+    <directory>%%java.io.tmpdir%%</directory>
+    <prefix>out</prefix>
+    <sort_size>1000000</sort_size>
+    <free_memory />
+    <compress>N</compress>
+    <compress_variable />
+    <unique_rows>N</unique_rows>
+    <fields>
+      <field>
+        <name>wtt_id</name>
+        <ascending>Y</ascending>
+        <case_sensitive>N</case_sensitive>
+        <collator_enabled>N</collator_enabled>
+        <collator_strength>0</collator_strength>
+        <presorted>N</presorted>
+      </field>
+      <field>
+        <name>id</name>
+        <ascending>Y</ascending>
+        <case_sensitive>N</case_sensitive>
+        <collator_enabled>N</collator_enabled>
+        <collator_strength>0</collator_strength>
+        <presorted>N</presorted>
+      </field>
+    </fields>
+    <cluster_schema />
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>336</xloc>
+      <yloc>496</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <step>
+    <name>Insert / Update</name>
+    <type>InsertUpdate</type>
+    <description />
+    <distribute>Y</distribute>
+    <custom_distribution />
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name />
+    </partitioning>
+    <connection>watchlistdb</connection>
+    <commit>100</commit>
+    <update_bypassed>N</update_bypassed>
+    <lookup>
+      <schema />
+      <table>watchlists</table>
+      <key>
+        <name>wtt_id</name>
+        <field>watchlisttype_id</field>
+        <condition>=</condition>
+        <name2 />
+      </key>
+      <key>
+        <name>id</name>
+        <field>remoteid</field>
+        <condition>=</condition>
+        <name2 />
+      </key>
+      <value>
+        <name>watchlisttype_id</name>
+        <rename>wtt_id</rename>
+        <update>N</update>
+      </value>
+      <value>
+        <name>remoteid</name>
+        <rename>id</rename>
+        <update>N</update>
+      </value>
+      <value>
+        <name>name</name>
+        <rename>name</rename>
+        <update>Y</update>
+      </value>
+      <value>
+        <name>notes</name>
+        <rename>notes</rename>
+        <update>Y</update>
+      </value>
+      <value>
+        <name>deleted</name>
+        <rename>deleted</rename>
+        <update>Y</update>
+      </value>
+      <value>
+        <name>createdon</name>
+        <rename>modified</rename>
+        <update>N</update>
+      </value>
+      <value>
+        <name>modifiedon</name>
+        <rename>modified</rename>
+        <update>Y</update>
+      </value>
+    </lookup>
+    <cluster_schema />
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>912</xloc>
+      <yloc>496</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <step>
+    <name>deleted = true</name>
+    <type>Constant</type>
+    <description />
+    <distribute>Y</distribute>
+    <custom_distribution />
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name />
+    </partitioning>
+    <fields>
+      <field>
+        <name>deleted</name>
+        <type>Boolean</type>
+        <format />
+        <currency />
+        <decimal />
+        <group />
+        <nullif>False</nullif>
+        <length>-1</length>
+        <precision>-1</precision>
+        <set_empty_string>N</set_empty_string>
+      </field>
+    </fields>
+    <cluster_schema />
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>464</xloc>
+      <yloc>496</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <step>
+    <name>modified</name>
+    <type>SystemInfo</type>
+    <description />
+    <distribute>Y</distribute>
+    <custom_distribution />
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name />
+    </partitioning>
+    <fields>
+      <field>
+        <name>modified</name>
+        <type>system date (variable)</type>
+      </field>
+    </fields>
+    <cluster_schema />
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>592</xloc>
+      <yloc>496</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
