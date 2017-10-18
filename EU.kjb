@@ -1,15 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <job>
-  <name>OFAC</name>
+  <name>EU</name>
   <description />
   <extended_description />
   <job_version />
-  <job_status>0</job_status>
   <directory>/</directory>
   <created_user>-</created_user>
-  <created_date>2017/09/21 16:42:37.902</created_date>
+  <created_date>2017/10/18 09:01:39.835</created_date>
   <modified_user>-</modified_user>
-  <modified_date>2017/09/21 16:42:37.902</modified_date>
+  <modified_date>2017/10/18 09:01:39.835</modified_date>
   <parameters>
     </parameters>
   <slaveservers>
@@ -304,21 +303,11 @@
       <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>64</xloc>
-      <yloc>64</yloc>
+      <xloc>48</xloc>
+      <yloc>112</yloc>
     </entry>
     <entry>
-      <name>Success</name>
-      <description />
-      <type>SUCCESS</type>
-      <parallel>N</parallel>
-      <draw>Y</draw>
-      <nr>0</nr>
-      <xloc>928</xloc>
-      <yloc>64</yloc>
-    </entry>
-    <entry>
-      <name>Set variables</name>
+      <name>Set EU</name>
       <description />
       <type>SET_VARIABLES</type>
       <replacevars>Y</replacevars>
@@ -327,23 +316,23 @@
       <fields>
         <field>
           <variable_name>WatchListKey</variable_name>
-          <variable_value>OFACPLC</variable_value>
+          <variable_value>EU</variable_value>
           <variable_type>JVM</variable_type>
         </field>
         <field>
           <variable_name>WatchListName</variable_name>
-          <variable_value>OFAC-PLC</variable_value>
+          <variable_value>EU Sanctions List</variable_value>
           <variable_type>JVM</variable_type>
         </field>
       </fields>
       <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>208</xloc>
-      <yloc>64</yloc>
+      <xloc>176</xloc>
+      <yloc>112</yloc>
     </entry>
     <entry>
-      <name>Add OFAC type</name>
+      <name>Add EU type</name>
       <description />
       <type>TRANS</type>
       <specification_method>filename</specification_method>
@@ -375,11 +364,11 @@
       <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>368</xloc>
-      <yloc>64</yloc>
+      <xloc>320</xloc>
+      <yloc>112</yloc>
     </entry>
     <entry>
-      <name>Mark all existing OFAC deleted</name>
+      <name>Mark all existing EU deleted</name>
       <description />
       <type>TRANS</type>
       <specification_method>filename</specification_method>
@@ -411,16 +400,26 @@
       <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>560</xloc>
-      <yloc>64</yloc>
+      <xloc>496</xloc>
+      <yloc>112</yloc>
     </entry>
     <entry>
-      <name>Merge OFAC lists</name>
+      <name>Success</name>
+      <description />
+      <type>SUCCESS</type>
+      <parallel>N</parallel>
+      <draw>Y</draw>
+      <nr>0</nr>
+      <xloc>848</xloc>
+      <yloc>112</yloc>
+    </entry>
+    <entry>
+      <name>Merge EU list</name>
       <description />
       <type>TRANS</type>
       <specification_method>filename</specification_method>
       <trans_object_id />
-      <filename>${Internal.Entry.Current.Directory}/OFAC.ktr</filename>
+      <filename>${Internal.Entry.Current.Directory}/EU.ktr</filename>
       <transname />
       <arg_from_previous>N</arg_from_previous>
       <params_from_previous>N</params_from_previous>
@@ -447,14 +446,14 @@
       <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>768</xloc>
-      <yloc>64</yloc>
+      <xloc>672</xloc>
+      <yloc>112</yloc>
     </entry>
   </entries>
   <hops>
     <hop>
       <from>START</from>
-      <to>Set variables</to>
+      <to>Set EU</to>
       <from_nr>0</from_nr>
       <to_nr>0</to_nr>
       <enabled>Y</enabled>
@@ -462,8 +461,8 @@
       <unconditional>Y</unconditional>
     </hop>
     <hop>
-      <from>Set variables</from>
-      <to>Add OFAC type</to>
+      <from>Set EU</from>
+      <to>Add EU type</to>
       <from_nr>0</from_nr>
       <to_nr>0</to_nr>
       <enabled>Y</enabled>
@@ -471,8 +470,8 @@
       <unconditional>N</unconditional>
     </hop>
     <hop>
-      <from>Add OFAC type</from>
-      <to>Mark all existing OFAC deleted</to>
+      <from>Add EU type</from>
+      <to>Mark all existing EU deleted</to>
       <from_nr>0</from_nr>
       <to_nr>0</to_nr>
       <enabled>Y</enabled>
@@ -480,8 +479,8 @@
       <unconditional>N</unconditional>
     </hop>
     <hop>
-      <from>Mark all existing OFAC deleted</from>
-      <to>Merge OFAC lists</to>
+      <from>Mark all existing EU deleted</from>
+      <to>Merge EU list</to>
       <from_nr>0</from_nr>
       <to_nr>0</to_nr>
       <enabled>Y</enabled>
@@ -489,7 +488,7 @@
       <unconditional>N</unconditional>
     </hop>
     <hop>
-      <from>Merge OFAC lists</from>
+      <from>Merge EU list</from>
       <to>Success</to>
       <from_nr>0</from_nr>
       <to_nr>0</to_nr>
