@@ -1437,49 +1437,49 @@
         <aggregate>dateOfBirths</aggregate>
         <subject>dateOfBirth_dateOfBirth</subject>
         <type>CONCAT_STRING</type>
-        <valuefield> or </valuefield>
+        <valuefield> / </valuefield>
       </field>
       <field>
         <aggregate>placeOfBirths</aggregate>
         <subject>placeOfBirth_placeOfBirth</subject>
         <type>CONCAT_STRING</type>
-        <valuefield> or </valuefield>
+        <valuefield> / </valuefield>
       </field>
       <field>
         <aggregate>vessels</aggregate>
         <subject>vessel_full</subject>
         <type>CONCAT_STRING</type>
-        <valuefield>;</valuefield>
+        <valuefield> / </valuefield>
       </field>
       <field>
         <aggregate>nationalities</aggregate>
         <subject>nationality_country</subject>
         <type>CONCAT_STRING</type>
-        <valuefield> or </valuefield>
+        <valuefield> / </valuefield>
       </field>
       <field>
         <aggregate>citizenships</aggregate>
         <subject>citizenship_country</subject>
         <type>CONCAT_STRING</type>
-        <valuefield>/</valuefield>
+        <valuefield> / </valuefield>
       </field>
       <field>
         <aggregate>addresses</aggregate>
         <subject>address_full</subject>
         <type>CONCAT_STRING</type>
-        <valuefield>; </valuefield>
+        <valuefield> / </valuefield>
       </field>
       <field>
         <aggregate>akas</aggregate>
         <subject>aka_full</subject>
         <type>CONCAT_STRING</type>
-        <valuefield>/</valuefield>
+        <valuefield> / </valuefield>
       </field>
       <field>
         <aggregate>ids</aggregate>
         <subject>id_full</subject>
         <type>CONCAT_STRING</type>
-        <valuefield>/</valuefield>
+        <valuefield> / </valuefield>
       </field>
     </fields>
     <cluster_schema />
