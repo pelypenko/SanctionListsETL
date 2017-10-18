@@ -653,7 +653,7 @@
     <length>Characters</length>
     <add_to_result_filenames>Y</add_to_result_filenames>
     <file>
-      <name>C:\git\SanctionListsETL\Examples\OSFI.txt</name>
+      <name>http://www.osfi-bsif.gc.ca/Eng/Docs/entstld.txt</name>
       <filemask />
       <exclude_filemask />
       <file_required>N</file_required>
