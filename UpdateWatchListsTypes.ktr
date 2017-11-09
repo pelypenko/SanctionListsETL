@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <transformation>
   <info>
-    <name>OFACWatchListsTypes</name>
+    <name>UpdateWatchListsTypes</name>
     <description />
     <extended_description />
     <trans_version />
@@ -437,14 +437,14 @@
   <notepads>
   </notepads>
   <connection>
-    <name>watchlistdb</name>
-    <server>localhost</server>
+    <name>ResultsDB</name>
+    <server>${DB_HOST}</server>
     <type>POSTGRESQL</type>
     <access>Native</access>
-    <database>watchlistdb</database>
-    <port>5432</port>
-    <username>postgres</username>
-    <password>Encrypted 2be98afc86aa7f2e49f0abb7edf9fa683</password>
+    <database>${DB_NAME}</database>
+    <port>${DB_PORT}</port>
+    <username>${DB_USER}</username>
+    <password>${DB_PASSWORD}</password>
     <servername />
     <data_tablespace />
     <index_tablespace />
@@ -463,7 +463,7 @@
       </attribute>
       <attribute>
         <code>PORT_NUMBER</code>
-        <attribute>5432</attribute>
+        <attribute>${DB_PORT}</attribute>
       </attribute>
       <attribute>
         <code>PRESERVE_RESERVED_WORD_CASE</code>
@@ -512,8 +512,8 @@
     </partitioning>
     <fields>
       <field>
-        <name>WatchListKey</name>
-        <variable>${WatchListKey}</variable>
+        <name>watchlist_key</name>
+        <variable>${watchlist_key}</variable>
         <type>String</type>
         <format />
         <currency />
@@ -524,8 +524,8 @@
         <trim_type>both</trim_type>
       </field>
       <field>
-        <name>WatchListName</name>
-        <variable>${WatchListName}</variable>
+        <name>watchlist_name</name>
+        <variable>${watchlist_name}</variable>
         <type>String</type>
         <format />
         <currency />
@@ -560,26 +560,26 @@
       <method>none</method>
       <schema_name />
     </partitioning>
-    <connection>watchlistdb</connection>
+    <connection>ResultsDB</connection>
     <commit>100</commit>
     <update_bypassed>N</update_bypassed>
     <lookup>
-      <schema />
+      <schema>${DB_SCHEMA}</schema>
       <table>watchlisttypes</table>
       <key>
-        <name>WatchListKey</name>
+        <name>watchlist_key</name>
         <field>key</field>
         <condition>=</condition>
         <name2 />
       </key>
       <value>
         <name>key</name>
-        <rename>WatchListKey</rename>
+        <rename>watchlist_key</rename>
         <update>N</update>
       </value>
       <value>
         <name>name</name>
-        <rename>WatchListName</rename>
+        <rename>watchlist_name</rename>
         <update>Y</update>
       </value>
       <value>

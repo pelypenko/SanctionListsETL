@@ -4,13 +4,49 @@
   <description />
   <extended_description />
   <job_version />
+  <job_status>0</job_status>
   <directory>/</directory>
   <created_user>-</created_user>
   <created_date>2017/10/18 09:01:39.835</created_date>
   <modified_user>-</modified_user>
   <modified_date>2017/10/18 09:01:39.835</modified_date>
   <parameters>
-    </parameters>
+    <parameter>
+      <name>DB_HOST</name>
+      <default_value>localhost</default_value>
+      <description />
+    </parameter>
+    <parameter>
+      <name>DB_NAME</name>
+      <default_value>watchlistdb</default_value>
+      <description />
+    </parameter>
+    <parameter>
+      <name>DB_PASSWORD</name>
+      <default_value>Tsunami9</default_value>
+      <description />
+    </parameter>
+    <parameter>
+      <name>DB_PORT</name>
+      <default_value>5432</default_value>
+      <description />
+    </parameter>
+    <parameter>
+      <name>DB_SCHEMA</name>
+      <default_value>public</default_value>
+      <description />
+    </parameter>
+    <parameter>
+      <name>DB_USER</name>
+      <default_value>postgres</default_value>
+      <description />
+    </parameter>
+    <parameter>
+      <name>WORKING_FOLDER</name>
+      <default_value>${Internal.Entry.Current.Directory}</default_value>
+      <description />
+    </parameter>
+  </parameters>
   <slaveservers>
     </slaveservers>
   <job-log-table>
@@ -303,8 +339,8 @@
       <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>48</xloc>
-      <yloc>112</yloc>
+      <xloc>80</xloc>
+      <yloc>80</yloc>
     </entry>
     <entry>
       <name>Set EU</name>
@@ -312,96 +348,24 @@
       <type>SET_VARIABLES</type>
       <replacevars>Y</replacevars>
       <filename />
-      <file_variable_type>JVM</file_variable_type>
+      <file_variable_type>CURRENT_JOB</file_variable_type>
       <fields>
         <field>
-          <variable_name>WatchListKey</variable_name>
+          <variable_name>watchlist_key</variable_name>
           <variable_value>EU</variable_value>
-          <variable_type>JVM</variable_type>
+          <variable_type>CURRENT_JOB</variable_type>
         </field>
         <field>
-          <variable_name>WatchListName</variable_name>
+          <variable_name>watchlist_name</variable_name>
           <variable_value>EU Sanctions List</variable_value>
-          <variable_type>JVM</variable_type>
+          <variable_type>CURRENT_JOB</variable_type>
         </field>
       </fields>
       <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>176</xloc>
-      <yloc>112</yloc>
-    </entry>
-    <entry>
-      <name>Add EU type</name>
-      <description />
-      <type>TRANS</type>
-      <specification_method>filename</specification_method>
-      <trans_object_id />
-      <filename>${Internal.Entry.Current.Directory}/UpdateWatchListsTypes.ktr</filename>
-      <transname />
-      <arg_from_previous>N</arg_from_previous>
-      <params_from_previous>N</params_from_previous>
-      <exec_per_row>N</exec_per_row>
-      <clear_rows>N</clear_rows>
-      <clear_files>N</clear_files>
-      <set_logfile>N</set_logfile>
-      <logfile />
-      <logext />
-      <add_date>N</add_date>
-      <add_time>N</add_time>
-      <loglevel>Nothing</loglevel>
-      <cluster>N</cluster>
-      <slave_server_name />
-      <set_append_logfile>N</set_append_logfile>
-      <wait_until_finished>Y</wait_until_finished>
-      <follow_abort_remote>N</follow_abort_remote>
-      <create_parent_folder>N</create_parent_folder>
-      <logging_remote_work>N</logging_remote_work>
-      <run_configuration>Pentaho local</run_configuration>
-      <parameters>
-        <pass_all_parameters>Y</pass_all_parameters>
-      </parameters>
-      <parallel>N</parallel>
-      <draw>Y</draw>
-      <nr>0</nr>
-      <xloc>320</xloc>
-      <yloc>112</yloc>
-    </entry>
-    <entry>
-      <name>Mark all existing EU deleted</name>
-      <description />
-      <type>TRANS</type>
-      <specification_method>filename</specification_method>
-      <trans_object_id />
-      <filename>${Internal.Entry.Current.Directory}/SetExistRecordsDeleted.ktr</filename>
-      <transname />
-      <arg_from_previous>N</arg_from_previous>
-      <params_from_previous>N</params_from_previous>
-      <exec_per_row>N</exec_per_row>
-      <clear_rows>N</clear_rows>
-      <clear_files>N</clear_files>
-      <set_logfile>N</set_logfile>
-      <logfile />
-      <logext />
-      <add_date>N</add_date>
-      <add_time>N</add_time>
-      <loglevel>Nothing</loglevel>
-      <cluster>N</cluster>
-      <slave_server_name />
-      <set_append_logfile>N</set_append_logfile>
-      <wait_until_finished>Y</wait_until_finished>
-      <follow_abort_remote>N</follow_abort_remote>
-      <create_parent_folder>N</create_parent_folder>
-      <logging_remote_work>N</logging_remote_work>
-      <run_configuration>Pentaho local</run_configuration>
-      <parameters>
-        <pass_all_parameters>Y</pass_all_parameters>
-      </parameters>
-      <parallel>N</parallel>
-      <draw>Y</draw>
-      <nr>0</nr>
-      <xloc>496</xloc>
-      <yloc>112</yloc>
+      <xloc>80</xloc>
+      <yloc>224</yloc>
     </entry>
     <entry>
       <name>Success</name>
@@ -410,16 +374,16 @@
       <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>848</xloc>
-      <yloc>112</yloc>
+      <xloc>800</xloc>
+      <yloc>368</yloc>
     </entry>
     <entry>
-      <name>Merge EU list</name>
+      <name>Load list</name>
       <description />
       <type>TRANS</type>
       <specification_method>filename</specification_method>
       <trans_object_id />
-      <filename>${Internal.Entry.Current.Directory}/EU.ktr</filename>
+      <filename>${WORKING_FOLDER}/EU.ktr</filename>
       <transname />
       <arg_from_previous>N</arg_from_previous>
       <params_from_previous>N</params_from_previous>
@@ -446,14 +410,160 @@
       <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>672</xloc>
-      <yloc>112</yloc>
+      <xloc>432</xloc>
+      <yloc>368</yloc>
+    </entry>
+    <entry>
+      <name>Set main variables</name>
+      <description />
+      <type>SET_VARIABLES</type>
+      <replacevars>Y</replacevars>
+      <filename />
+      <file_variable_type>CURRENT_JOB</file_variable_type>
+      <fields>
+        <field>
+          <variable_name>working_data_folder</variable_name>
+          <variable_value>${WORKING_FOLDER}\data</variable_value>
+          <variable_type>CURRENT_JOB</variable_type>
+        </field>
+        <field>
+          <variable_name>source_file</variable_name>
+          <variable_value>${working_data_folder}\eu_global.xml</variable_value>
+          <variable_type>CURRENT_JOB</variable_type>
+        </field>
+      </fields>
+      <parallel>N</parallel>
+      <draw>Y</draw>
+      <nr>0</nr>
+      <xloc>432</xloc>
+      <yloc>80</yloc>
+    </entry>
+    <entry>
+      <name>Create data folder</name>
+      <description />
+      <type>CREATE_FOLDER</type>
+      <foldername>${working_data_folder}</foldername>
+      <fail_of_folder_exists>N</fail_of_folder_exists>
+      <parallel>N</parallel>
+      <draw>Y</draw>
+      <nr>0</nr>
+      <xloc>800</xloc>
+      <yloc>80</yloc>
+    </entry>
+    <entry>
+      <name>Add EU</name>
+      <description />
+      <type>TRANS</type>
+      <specification_method>filename</specification_method>
+      <trans_object_id />
+      <filename>${WORKING_FOLDER}/UpdateWatchListsTypes.ktr</filename>
+      <transname />
+      <arg_from_previous>N</arg_from_previous>
+      <params_from_previous>N</params_from_previous>
+      <exec_per_row>N</exec_per_row>
+      <clear_rows>N</clear_rows>
+      <clear_files>N</clear_files>
+      <set_logfile>N</set_logfile>
+      <logfile />
+      <logext />
+      <add_date>N</add_date>
+      <add_time>N</add_time>
+      <loglevel>Nothing</loglevel>
+      <cluster>N</cluster>
+      <slave_server_name />
+      <set_append_logfile>N</set_append_logfile>
+      <wait_until_finished>Y</wait_until_finished>
+      <follow_abort_remote>N</follow_abort_remote>
+      <create_parent_folder>N</create_parent_folder>
+      <logging_remote_work>N</logging_remote_work>
+      <run_configuration>Pentaho local</run_configuration>
+      <parameters>
+        <pass_all_parameters>Y</pass_all_parameters>
+      </parameters>
+      <parallel>N</parallel>
+      <draw>Y</draw>
+      <nr>0</nr>
+      <xloc>432</xloc>
+      <yloc>224</yloc>
+    </entry>
+    <entry>
+      <name>Delete all EU</name>
+      <description />
+      <type>TRANS</type>
+      <specification_method>filename</specification_method>
+      <trans_object_id />
+      <filename>${WORKING_FOLDER}/SetExistRecordsDeleted.ktr</filename>
+      <transname />
+      <arg_from_previous>N</arg_from_previous>
+      <params_from_previous>N</params_from_previous>
+      <exec_per_row>N</exec_per_row>
+      <clear_rows>N</clear_rows>
+      <clear_files>N</clear_files>
+      <set_logfile>N</set_logfile>
+      <logfile />
+      <logext />
+      <add_date>N</add_date>
+      <add_time>N</add_time>
+      <loglevel>Nothing</loglevel>
+      <cluster>N</cluster>
+      <slave_server_name />
+      <set_append_logfile>N</set_append_logfile>
+      <wait_until_finished>Y</wait_until_finished>
+      <follow_abort_remote>N</follow_abort_remote>
+      <create_parent_folder>N</create_parent_folder>
+      <logging_remote_work>N</logging_remote_work>
+      <run_configuration>Pentaho local</run_configuration>
+      <parameters>
+        <pass_all_parameters>Y</pass_all_parameters>
+      </parameters>
+      <parallel>N</parallel>
+      <draw>Y</draw>
+      <nr>0</nr>
+      <xloc>800</xloc>
+      <yloc>224</yloc>
+    </entry>
+    <entry>
+      <name>Get source file</name>
+      <description />
+      <type>HTTP</type>
+      <url>http://ec.europa.eu/external_relations/cfsp/sanctions/list/version4/global/global.xml</url>
+      <targetfilename>${source_file}</targetfilename>
+      <file_appended>N</file_appended>
+      <date_time_added>N</date_time_added>
+      <targetfilename_extension />
+      <uploadfilename />
+      <run_every_row>N</run_every_row>
+      <url_fieldname />
+      <upload_fieldname />
+      <dest_fieldname />
+      <username />
+      <password>Encrypted </password>
+      <proxy_host />
+      <proxy_port />
+      <non_proxy_hosts />
+      <addfilenameresult>Y</addfilenameresult>
+      <headers>
+      </headers>
+      <parallel>N</parallel>
+      <draw>Y</draw>
+      <nr>0</nr>
+      <xloc>80</xloc>
+      <yloc>368</yloc>
     </entry>
   </entries>
   <hops>
     <hop>
+      <from>Load list</from>
+      <to>Success</to>
+      <from_nr>0</from_nr>
+      <to_nr>0</to_nr>
+      <enabled>Y</enabled>
+      <evaluation>Y</evaluation>
+      <unconditional>N</unconditional>
+    </hop>
+    <hop>
       <from>START</from>
-      <to>Set EU</to>
+      <to>Set main variables</to>
       <from_nr>0</from_nr>
       <to_nr>0</to_nr>
       <enabled>Y</enabled>
@@ -461,8 +571,17 @@
       <unconditional>Y</unconditional>
     </hop>
     <hop>
+      <from>Set main variables</from>
+      <to>Create data folder</to>
+      <from_nr>0</from_nr>
+      <to_nr>0</to_nr>
+      <enabled>Y</enabled>
+      <evaluation>Y</evaluation>
+      <unconditional>N</unconditional>
+    </hop>
+    <hop>
       <from>Set EU</from>
-      <to>Add EU type</to>
+      <to>Add EU</to>
       <from_nr>0</from_nr>
       <to_nr>0</to_nr>
       <enabled>Y</enabled>
@@ -470,8 +589,8 @@
       <unconditional>N</unconditional>
     </hop>
     <hop>
-      <from>Add EU type</from>
-      <to>Mark all existing EU deleted</to>
+      <from>Add EU</from>
+      <to>Delete all EU</to>
       <from_nr>0</from_nr>
       <to_nr>0</to_nr>
       <enabled>Y</enabled>
@@ -479,8 +598,8 @@
       <unconditional>N</unconditional>
     </hop>
     <hop>
-      <from>Mark all existing EU deleted</from>
-      <to>Merge EU list</to>
+      <from>Create data folder</from>
+      <to>Set EU</to>
       <from_nr>0</from_nr>
       <to_nr>0</to_nr>
       <enabled>Y</enabled>
@@ -488,8 +607,17 @@
       <unconditional>N</unconditional>
     </hop>
     <hop>
-      <from>Merge EU list</from>
-      <to>Success</to>
+      <from>Delete all EU</from>
+      <to>Get source file</to>
+      <from_nr>0</from_nr>
+      <to_nr>0</to_nr>
+      <enabled>Y</enabled>
+      <evaluation>Y</evaluation>
+      <unconditional>N</unconditional>
+    </hop>
+    <hop>
+      <from>Get source file</from>
+      <to>Load list</to>
       <from_nr>0</from_nr>
       <to_nr>0</to_nr>
       <enabled>Y</enabled>
