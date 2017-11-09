@@ -1,4 +1,4 @@
-Data transformations schemas of UA, EU, AU governments sanction lists (dif departments) into the internal data format.
+Data transformations schemas of US, EU, AU governments sanction lists (dif departments) into the internal data format.
 
 Used Pentaho Data Integration tool. 
 
